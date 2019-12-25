@@ -1,9 +1,9 @@
 require_relative '../../../domain/use_cases/create_network'
 
 describe CreateNetwork do
-  subject(:use_case) { described_class.new(user, organization, network, adapters) }
+  subject(:use_case) { described_class.new(actor, organization, network, adapters) }
 
-  let(:user) { instance_double(User, can?: authorized) }
+  let(:actor) { instance_double(User, can?: authorized) }
   let(:authorized) { true }
   let(:organization) { instance_double(Organization) }
   let(:network) { instance_double(Network, valid?: valid) }
@@ -15,7 +15,7 @@ describe CreateNetwork do
   describe '#perform' do
     subject(:perform) { use_case.perform }
 
-    context 'when the user is unauthorized' do
+    context 'when the actor is unauthorized' do
       let(:authorized) { false }
 
       before do
@@ -31,7 +31,7 @@ describe CreateNetwork do
       end
     end
 
-    context 'when the user is authorized' do
+    context 'when the actor is authorized' do
       let(:authorized) { true }
 
       before do

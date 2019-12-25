@@ -1,11 +1,11 @@
-require_relative '../../../domain/use_cases/create_organization'
+require_relative '../../../domain/use_cases/create_user'
 
-describe CreateOrganization do
-  subject(:use_case) { described_class.new(actor, organization, adapters) }
+describe CreateUser do
+  subject(:use_case) { described_class.new(actor, user, adapters) }
 
   let(:actor) { instance_double(User, can?: authorized) }
   let(:authorized) { true }
-  let(:organization) { instance_double(Organization, valid?: valid) }
+  let(:user) { instance_double(User, valid?: valid) }
   let(:valid) { true }
   let(:adapters) { [adapter1, adapter2] }
   let(:adapter1) { instance_double('adapter1') }
@@ -33,7 +33,7 @@ describe CreateOrganization do
     context 'when the actor is authorized' do
       let(:authorized) { true }
 
-      context 'and the organization is invalid' do
+      context 'and the user is invalid' do
         let(:valid) { false }
 
         before do
@@ -49,18 +49,18 @@ describe CreateOrganization do
         end
       end
 
-      context 'and the organization is valid' do
+      context 'and the user is valid' do
         let(:valid) { true }
-        let(:organization_repository) { instance_double(OrganizationRepository) }
-        let(:created_organization) { instance_double(Organization, id: organization_id) }
+        let(:user_repository) { instance_double(UserRepository) }
+        let(:created_user) { instance_double(User, id: user_id) }
 
         before do
-          allow(OrganizationRepository).to receive(:new).and_return(organization_repository)
-          allow(organization_repository).to receive(:create).and_return(created_organization)
+          allow(UserRepository).to receive(:new).and_return(user_repository)
+          allow(user_repository).to receive(:create).and_return(created_user)
         end
 
-        context 'and the repository fails to create the organization' do
-          let(:organization_id) { nil }
+        context 'and the repository fails to create the user' do
+          let(:user_id) { nil }
 
           before do
             allow(adapter1).to receive(:failed)
@@ -75,8 +75,8 @@ describe CreateOrganization do
           end
         end
 
-        context 'and the repository successfully creates the organization' do
-          let(:organization_id) { 42 }
+        context 'and the repository successfully creates the user' do
+          let(:user_id) { 42 }
 
           before do
             allow(adapter1).to receive(:succeeded)
