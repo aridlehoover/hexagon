@@ -1,12 +1,16 @@
+require_relative './validators/presence_validator'
+require_relative './validators/list_validator'
+require_relative './validators/regex_validator'
+
 module Validations
   def self.included(base)
-    base.instance_variable_set(:@rules, Hash.new)
+    base.instance_variable_set(:@validations, Hash.new)
     base.extend(ClassMethods)
   end
 
   module ClassMethods
-    def validates(field, validation = :present)
-      self.instance_variable_get(:@rules)[field] = validation
+    def validates(field, validations = { presence: true })
+      self.instance_variable_get(:@validations)[field] = validations
     end
   end
 
@@ -15,25 +19,26 @@ module Validations
   def valid?
     @errors = Array.new
 
-    self.class.instance_variable_get(:@rules).each do |field, rule|
-      value = send(field)
-
-      case true
-      when rule == :present
-        if value.nil?
-          @errors << "#{field.to_s} missing"
-        end
-      when rule.is_a?(Array)
-        if !rule.include?(value)
-          @errors << "#{field.to_s} not in #{rule.inspect}"
-        end
-      when rule.is_a?(Regexp)
-        if value.nil? || !(value =~ rule)
-          @errors << "#{field.to_s} does not match #{rule.inspect}"
-        end
-      end
+    validators.each do |validator|
+      errors << validator.error unless validator.valid?
     end
 
     @errors.count == 0
+  end
+
+  private
+
+  def validators
+    validators = Array.new
+
+    self.class.instance_variable_get(:@validations).each do |field, validations|
+      value = send(field)
+
+      validations.each do |validator, validation|
+        validators << Industrialist.build(:validator, validator, field, value, validation)
+      end
+    end
+
+    validators
   end
 end

@@ -5,7 +5,7 @@ class Network < Entity
   include Validations
 
   validates :name
-  validates :type, [:mixed, :wired, :wireless]
+  validates :type, list: [:mixed, :wired, :wireless]
 
   attr_accessor :id, :name, :type
 end

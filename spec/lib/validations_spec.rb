@@ -4,8 +4,8 @@ class TestHarness
   include Validations
 
   validates :name
-  validates :seasoning, [:plain, :salted]
-  validates :type, /(almond|cashew|pecan)/i
+  validates :seasoning, list: [:plain, :salted]
+  validates :type, regex: /(almond|cashew|pecan)/i
 
   attr_accessor :name, :seasoning, :type
 end

@@ -5,7 +5,7 @@ class User < Entity
   include Validations
 
   validates :name
-  validates :email, /\S+@\S+\.\S+/
+  validates :email, regex: /\S+@\S+\.\S+/
 
   attr_accessor :id, :name, :email
 

@@ -17,7 +17,7 @@ The project is organized as follows:
 
 1. There is no need for working entities and repositories to create a use case. Everything can be mocked and spied upon.
 2. The entity base class is a neat little bit of code to dynamically load data from a hash into an entity with attr_accessors.
-3. The validations module is another fun piece of code. But, it currently violates the Open/Closed Principle. I need a way to add rule types without a case statement.
+3. The validations module is another fun piece of code. I refactored it using Industrialist so that it no longer violates the Open/Closed principle.
 
 ## Open questions:
 
