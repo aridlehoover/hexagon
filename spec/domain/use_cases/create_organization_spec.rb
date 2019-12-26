@@ -1,12 +1,14 @@
 require_relative '../../../domain/use_cases/create_organization'
 
 describe CreateOrganization do
-  subject(:use_case) { described_class.new(actor, organization, adapters) }
+  subject(:use_case) { described_class.new(params) }
 
-  let(:actor) { instance_double(User, can?: authorized) }
-  let(:authorized) { true }
+  let(:params) { { organization: organization, actor: actor, context: context, adapters: adapters } }
   let(:organization) { instance_double(Organization, valid?: valid) }
   let(:valid) { true }
+  let(:actor) { instance_double(User, can?: authorized) }
+  let(:authorized) { true }
+  let(:context) { instance_double(Organization) }
   let(:adapters) { [adapter1, adapter2] }
   let(:adapter1) { instance_double('adapter1') }
   let(:adapter2) { instance_double('adapter2') }

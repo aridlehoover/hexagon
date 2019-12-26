@@ -1,16 +1,17 @@
 require_relative '../repositories/user_repository'
 
 class CreateUser
-  attr_reader :actor, :user, :adapters
+  attr_reader :user, :actor, :context, :adapters
 
-  def initialize(actor, user, adapters = [])
-    @actor = actor
+  def initialize(user:, actor:, context: nil, adapters: [])
     @user = user
+    @actor = actor
+    @context = context
     @adapters = Array(adapters)
   end
 
   def perform
-    return adapters.each(&:unauthorized) if !actor.can?(:create_user)
+    return adapters.each(&:unauthorized) if !actor.can?(:create_user, context)
     return adapters.each(&:invalid) if !user.valid?
 
     created_user = UserRepository.new.create(user)

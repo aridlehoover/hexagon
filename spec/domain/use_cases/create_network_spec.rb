@@ -1,13 +1,14 @@
 require_relative '../../../domain/use_cases/create_network'
 
 describe CreateNetwork do
-  subject(:use_case) { described_class.new(actor, organization, network, adapters) }
+  subject(:use_case) { described_class.new(params) }
 
-  let(:actor) { instance_double(User, can?: authorized) }
-  let(:authorized) { true }
-  let(:organization) { instance_double(Organization) }
+  let(:params) { { network: network, actor: actor, context: context, adapters: adapters } }
   let(:network) { instance_double(Network, valid?: valid) }
   let(:valid) { true }
+  let(:actor) { instance_double(User, can?: authorized) }
+  let(:authorized) { true }
+  let(:context) { instance_double(Organization) }
   let(:adapters) { [adapter1, adapter2] }
   let(:adapter1) { instance_double('adapter1') }
   let(:adapter2) { instance_double('adapter2') }

@@ -1,16 +1,17 @@
 require_relative '../repositories/organization_repository'
 
 class CreateOrganization
-  attr_reader :actor, :organization, :adapters
+  attr_reader :organization, :actor, :context, :adapters
 
-  def initialize(actor, organization, adapters = [])
-    @actor = actor
+  def initialize(organization:, actor:, context: nil, adapters: [])
     @organization = organization
+    @actor = actor
+    @context = context
     @adapters = Array(adapters)
   end
 
   def perform
-    return adapters.each(&:unauthorized) if !actor.can?(:create_organization)
+    return adapters.each(&:unauthorized) if !actor.can?(:create_organization, context)
     return adapters.each(&:invalid) if !organization.valid?
 
     created_organization = OrganizationRepository.new.create(organization)
