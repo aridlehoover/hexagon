@@ -37,11 +37,17 @@ The project is organized as follows:
 1. Domain logic should not reference anything outside the domain.
 2. Adapters that satisfy a port's interface may be injected into the domain objects, allowing the domain to interact with them.
 3. Use cases should be initialized with entities, not raw parameters. Passing raw parameters to a use case significantly increases complexity.
+4. Repositories are what Bob Martin called Entity Gateways. They should sit atop a database driver that provides all of the database primitives. So, create, read, update, delete should NOT be the interface inside the repository. The driver should implement those commands. The Repository should combine them into higher order commands:
+
+  * UserRepository#find_where(params)
+  * NetworkRepository#find_with_alerts_by_client_count
+  * OrganizationRepository#find_all_by_name
 
 ## Interesting Code
 
-1. The entity base class dynamically loads data from a hash into an entity with attr_accessors.
+1. The entity base class dynamically loads data from a hash into an entity with attr_accessors. It also has a method to access all of the "attributes" by introspecting the instance variables.
 2. The validations module started off as a case statement with hard coded conditionals. I refactored it using Industrialist so that it can be extended by adding additional validator classes, without modifying the module itself.
+3. The InMemoryStore keeps everything in a class instance variable named @store, which contains a hash for each class of data in the store, each with it's own list of entities and id space.
 
 ## Open Questions
 
@@ -49,6 +55,3 @@ The project is organized as follows:
 2. Are the repositories supposed to contain raw SQL? Or, do the call out to a gateway? (No. The repositories are interfaces that whatever database adapter needs to implement.)
 3. What does the service boundary look like between the UI and the domain logic. Something needs to convert the data from strings in a params object into entities.
 4. How do you structure the UI and persistence layers around the domain layer in a way that does not obscure the domain logic?
-
-
-

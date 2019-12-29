@@ -1,5 +1,5 @@
 require_relative '../../lib/entity'
-require_relative '../../lib/validations'
+require_relative '../../lib/validations/validations'
 
 class Network < Entity
   include Validations
@@ -7,5 +7,5 @@ class Network < Entity
   validates :name
   validates :type, list: [:mixed, :wired, :wireless]
 
-  attr_accessor :id, :name, :type
+  attr_accessor :name, :type
 end

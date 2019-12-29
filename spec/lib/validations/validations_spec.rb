@@ -1,4 +1,4 @@
-require_relative '../../lib/validations'
+require_relative '../../../lib/validations/validations'
 
 class TestHarness
   include Validations
