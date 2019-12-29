@@ -8,6 +8,7 @@ describe DataStores::InMemoryStore do
   let(:mickey) { { name: 'Mickey Mouse' } }
   let(:donald) { { name: 'Donald Duck' } }
   let(:goofy)  { { name: 'Goofy' } }
+  let(:minnie) { { name: 'Minnie Mouse' } }
 
   before { store.clear }
 
@@ -84,6 +85,53 @@ describe DataStores::InMemoryStore do
               it 'returns the requested entity' do
                 expect(find.id).to eq(id)
               end
+            end
+          end
+        end
+      end
+    end
+
+    describe '#find_where' do
+      subject(:find_where) { store.find_where(attributes) }
+
+      context 'when the attributesa are not a hash' do
+        let(:attributes) { 'not a hash' }
+
+        it 'throws an ArgumentError' do
+          expect { find_where }.to raise_error(ArgumentError)
+        end
+      end
+
+
+      context 'when the attributesa are not a hash' do
+        context 'when the store is empty' do
+          let(:attributes) { mickey }
+
+          it 'returns an empty array' do
+            expect(find_where).to eq([])
+          end
+        end
+
+        context 'when the store contains entites' do
+          before do
+            store.create(mickey)
+            store.create(donald)
+            store.create(goofy)
+          end
+
+          context 'and the attributes do not match an entity' do
+            let(:attributes) { minnie }
+
+            it 'returns an empty array' do
+              expect(find_where).to eq([])
+            end
+          end
+
+          context 'and the attributes match an entity' do
+            let(:attributes) { goofy }
+
+            it 'returns an empty array' do
+              expect(find_where.first.name).to eq(goofy[:name])
             end
           end
         end

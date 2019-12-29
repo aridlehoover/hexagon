@@ -9,8 +9,11 @@ class Entity
   end
 
   def attributes
-    attrs = {}
-    instance_variables.each { |variable| attrs.merge(variable: instance_variable_get(variable)) }
+    attrs = Hash.new
+    instance_variables.each do |variable|
+      key = variable[1..-1].to_sym
+      attrs[key] = instance_variable_get(variable)
+    end
     attrs
   end
 end

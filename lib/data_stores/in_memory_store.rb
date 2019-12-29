@@ -33,6 +33,19 @@ module DataStores
       entities.find { |entity| entity.id == id }
     end
 
+    def find_where(attributes)
+      raise ArgumentError unless attributes.is_a?(Hash)
+
+      entities.select do |entity|
+        found = true
+        attributes.each do |k, v|
+          found = false unless entity.attributes[k] == v
+          break unless found
+        end
+        found
+      end
+    end
+
     def create(attributes = {})
       raise ArgumentError unless attributes.is_a?(Hash)
       raise ArgumentError if attributes[:id]
