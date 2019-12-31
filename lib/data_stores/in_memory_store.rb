@@ -1,4 +1,6 @@
 module DataStores
+  class NotFoundError < StandardError; end
+
   class InMemoryStore
     attr_reader :klass
 
@@ -61,6 +63,24 @@ module DataStores
       )
 
       entities << entity
+      entity
+    end
+
+    def update(attributes = {})
+      raise ArgumentError unless attributes.is_a?(Hash)
+      raise ArgumentError unless attributes[:id]
+
+      entity = find(attributes[:id])
+      raise NotFoundError if entity.nil?
+
+      time = Time.now.utc
+
+      attributes.each do |attribute, value|
+        entity.send("#{attribute}=".to_sym, value)
+      end
+
+      entity.updated_at = time
+
       entity
     end
 

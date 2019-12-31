@@ -94,7 +94,7 @@ describe DataStores::InMemoryStore do
     describe '#find_where' do
       subject(:find_where) { store.find_where(attributes) }
 
-      context 'when the attributesa are not a hash' do
+      context 'when the attributes are not a hash' do
         let(:attributes) { 'not a hash' }
 
         it 'throws an ArgumentError' do
@@ -103,7 +103,7 @@ describe DataStores::InMemoryStore do
       end
 
 
-      context 'when the attributesa are not a hash' do
+      context 'when the attributes are not a hash' do
         context 'when the store is empty' do
           let(:attributes) { mickey }
 
@@ -145,16 +145,16 @@ describe DataStores::InMemoryStore do
         let(:attributes) { 'not a hash' }
 
         it 'throws an argument error' do
-          expect { store.create(attributes) }.to raise_error(ArgumentError)
+          expect { create }.to raise_error(ArgumentError)
         end
       end
 
-      context 'when the attributes is a hash' do
+      context 'when the attributes are a hash' do
         context 'and the id is set' do
           let(:attributes) { mickey.merge(id: 1) }
 
           it 'throws an argument error' do
-            expect { store.create(attributes) }.to raise_error(ArgumentError)
+            expect { create }.to raise_error(ArgumentError)
           end
         end
 
@@ -197,6 +197,76 @@ describe DataStores::InMemoryStore do
             it 'assigns the next sequential id to the new entity' do
               previous_high_id = store.find_all.last.id
               expect(create.id).to eq(previous_high_id + 1)
+            end
+          end
+        end
+      end
+    end
+
+    describe '#update' do
+      subject(:update) { store.update(attributes) }
+
+      before do
+        store.create(mickey)
+        store.create(donald)
+        store.create(goofy)
+      end
+
+      context 'when the attributes are not a hash' do
+        let(:attributes) { 'not a hash' }
+
+        it 'throws an argument error' do
+          expect { update }.to raise_error(ArgumentError)
+        end
+      end
+
+      context 'when the attributes are a hash' do
+        context 'and the id is not set' do
+          let(:attributes) { mickey }
+
+          it 'throws an argument error' do
+            expect { update }.to raise_error(ArgumentError)
+          end
+        end
+
+        context 'and the id is set' do
+          context 'and the id is not found' do
+            let(:attributes) { { id: 99, name: 'Mickey the Mouse' } }
+
+            it 'throws a NotFoundError' do
+              expect { update }.to raise_error(DataStores::NotFoundError)
+            end
+          end
+
+          context 'and the id is found' do
+            let(:attributes) { { id: 1, name: 'Mickey the Mouse' } }
+            let(:first_entity) { store.find(1) }
+
+            it 'updates the the entity to the store' do
+              expect(update.name).to eq(attributes[:name])
+            end
+
+            it 'returns the newly updated entity' do
+              expect(update).to be_a(klass)
+            end
+
+            it 'does not change the entity id' do
+              expect(update.id).to eq(attributes[:id])
+            end
+
+            it 'does not change the entity created_at' do
+              original_created_at = first_entity.created_at
+              expect(update.created_at).to eq(original_created_at)
+            end
+
+            it 'changes the entity updated_at' do
+              original_updated_at = first_entity.updated_at
+              expect(update.updated_at).to be > original_updated_at
+            end
+
+            it 'created_at and upated_at are not the same' do
+              entity = update
+              expect(entity.created_at).to_not eq(entity.updated_at)
             end
           end
         end
