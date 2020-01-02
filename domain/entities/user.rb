@@ -1,15 +1,13 @@
 require_relative '../../lib/entity'
-require_relative '../../lib/validations/validations'
+require_relative '../../lib/validation'
+require_relative '../../lib/authorization'
 
 class User < Entity
-  include Validations
+  include Validation
+  include Authorization
 
   validates :name
   validates :email, regex: /\S+@\S+\.\S+/
 
   attr_accessor :name, :email
-
-  def can?(action, context = nil)
-    # authorize user to perform action within the context
-  end
 end

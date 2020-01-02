@@ -2,7 +2,7 @@ require_relative './validators/presence_validator'
 require_relative './validators/list_validator'
 require_relative './validators/regex_validator'
 
-module Validations
+module Validation
   def self.included(base)
     base.instance_variable_set(:@validations, Hash.new)
     base.extend(ClassMethods)

@@ -1,8 +1,8 @@
 require_relative '../../lib/entity'
-require_relative '../../lib/validations/validations'
+require_relative '../../lib/validation'
 
 class Organization < Entity
-  include Validations
+  include Validation
 
   validates :name
 

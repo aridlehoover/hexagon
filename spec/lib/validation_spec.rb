@@ -1,7 +1,7 @@
-require_relative '../../../lib/validations/validations'
+require_relative '../../lib/validation'
 
 class TestHarness
-  include Validations
+  include Validation
 
   validates :name
   validates :seasoning, list: [:plain, :salted]
@@ -10,7 +10,7 @@ class TestHarness
   attr_accessor :name, :seasoning, :type
 end
 
-describe Validations do
+describe Validation do
   subject(:test_harness) { TestHarness.new }
 
   before do
