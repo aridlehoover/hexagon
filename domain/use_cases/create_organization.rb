@@ -11,7 +11,7 @@ class CreateOrganization
   end
 
   def perform
-    return adapters.each(&:unauthorized) if !actor.can?(:create_organization, context)
+    return adapters.each(&:unauthorized) unless actor.can?(:create_organization, context)
     return adapters.each(&:invalid) if !organization.valid?
 
     created_organization = OrganizationRepository.new.create(organization)

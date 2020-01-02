@@ -11,7 +11,7 @@ class CreateUser
   end
 
   def perform
-    return adapters.each(&:unauthorized) if !actor.can?(:create_user, context)
+    return adapters.each(&:unauthorized) unless actor.can?(:create_user, context)
     return adapters.each(&:invalid) if !user.valid?
 
     created_user = UserRepository.new.create(user)
