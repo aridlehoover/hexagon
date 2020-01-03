@@ -12,7 +12,7 @@ class CreateNetwork
 
   def perform
     return adapters.each(&:unauthorized) unless actor.can?(:create_network, context)
-    return adapters.each(&:invalid) if !network.valid?
+    return adapters.each(&:invalid) unless network.valid?
 
     created_network = NetworkRepository.new.create(network)
     return adapters.each(&:failed) if created_network.id.nil?

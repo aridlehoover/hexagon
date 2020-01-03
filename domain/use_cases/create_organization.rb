@@ -12,7 +12,7 @@ class CreateOrganization
 
   def perform
     return adapters.each(&:unauthorized) unless actor.can?(:create_organization, context)
-    return adapters.each(&:invalid) if !organization.valid?
+    return adapters.each(&:invalid) unless organization.valid?
 
     created_organization = OrganizationRepository.new.create(organization)
     return adapters.each(&:failed) if created_organization.id.nil?
