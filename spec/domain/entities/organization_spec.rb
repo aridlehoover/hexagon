@@ -4,7 +4,7 @@ describe Organization do
   subject(:organization) { described_class.new(params) }
 
   let(:params) { { name: name } }
-  let(:name) { 'Any string is valid' }
+  let(:name) { 'Any non-nil value is valid' }
 
   describe 'validations' do
     describe 'name' do

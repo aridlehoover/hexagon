@@ -4,7 +4,7 @@ describe User do
   subject(:user) { described_class.new(params) }
 
   let(:params) { { name: name, email: email } }
-  let(:name) { 'Any string is valid' }
+  let(:name) { 'Any non-nil value is valid' }
   let(:email) { 'address@example.com' }
 
   describe 'validations' do

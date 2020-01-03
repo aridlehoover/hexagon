@@ -4,8 +4,8 @@ describe Network do
   subject(:network) { described_class.new(params) }
 
   let(:params) { { name: name, type: type } }
-  let(:name) { 'Any string is valid' }
-  let(:type) { :wired }
+  let(:name) { 'Any non-nil value is valid' }
+  let(:type) { Network::TYPES.sample }
 
   describe 'validations' do
     describe 'name' do
@@ -45,7 +45,7 @@ describe Network do
         end
 
         context 'and in allowed values' do
-          let(:type) { :wireless }
+          let(:type) { Network::TYPES.sample }
 
           it 'is valid' do
             expect(network.valid?).to be(true)
