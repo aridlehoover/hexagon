@@ -9,5 +9,5 @@ class Network < Entity
   validates :name
   validates :type, list: TYPES
 
-  attr_accessor :name, :type
+  attr_accessor :name, :type, :organization_id
 end
