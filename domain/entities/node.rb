@@ -17,5 +17,5 @@ class Node < Entity
   validates :serial
   validates :ip_address, regex: IP_ADDRESS_FORMAT
 
-  attr_accessor :name, :product_line, :model, :type, :mac_address, :serial, :ip_address
+  attr_accessor :name, :product_line, :model, :type, :mac_address, :serial, :ip_address, :network_id
 end
